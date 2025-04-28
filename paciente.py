@@ -6,3 +6,7 @@ class paciente(Persona):
     def __init__(self, donante_receptor):
         self.donante_receptor = donante_receptor
 
+    def donante_receptor(self):
+        return self.donante_receptor
+    
+    
