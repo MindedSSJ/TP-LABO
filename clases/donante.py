@@ -10,11 +10,3 @@ class donante(paciente):
         self.hora_ablacion = hora_ablacion
         self.lista_organos = []
         
-        def tiene_organos(self):
-
-            if self.lista_organos == None:
-                print("El donante no tiene organos viables para donar")
-            else:
-                print("{self.lista_organos} son los organos viables para donar del paciente")
-                
-                
