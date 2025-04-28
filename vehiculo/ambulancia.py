@@ -6,4 +6,6 @@ class ambulancia(vehiculo):
 
         self.tiempo_viaje = tiempo_viaje
         self.trafico = trafico
-        
+    
+    def tiempor_viaje(self, distancia):
+        return vehiculo.velocidad / distancia - self.trafico

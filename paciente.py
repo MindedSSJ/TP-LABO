@@ -9,4 +9,3 @@ class paciente(Persona):
     def donante_receptor(self):
         return self.donante_receptor
     
-    
