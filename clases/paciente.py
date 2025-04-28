@@ -1,4 +1,4 @@
-from clases.persona import Persona
+from persona import Persona
 from abc import ABC, abstractmethod
 
 class paciente(Persona):
