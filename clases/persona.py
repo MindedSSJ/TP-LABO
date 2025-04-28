@@ -9,4 +9,7 @@ class Persona():
         self.tipo_sangre = tipo_sangre
         self.centro_salud = centro_salud
 
+    def info(self):
+        return (f"Nombre: {self.nombre}, DNI: {self.dni}, Sexo: {self.sexo}, Telefono: {self.telefono}, Tipo de Sangre: {self.tipo_sangre}, Centro de Salud: {self.centro_salud}")
+            
     
