@@ -1,43 +1,30 @@
-class CentroDeSalud:
-    def _init_(self, nombre, direccion, partido, provincia, telefono):
+class Cirujano:
+
+    def __init__(self, nombre, especialidades, disponible=True):
+        """
+        especialidades: lista de órganos o tipos en los que el cirujano es experto.
+        disponible: indica si puede operar actualmente.
+        """
         self.nombre = nombre
-        self.direccion = direccion
-        self.partido = partido
-        self.provincia = provincia
-        self.telefono = telefono
-        self.cirujanos = []
-        self.vehiculos = []
+        self.especialidades = especialidades  # lista de strings
+        self.disponible = disponible
 
-    def agregar_cirujano(self, cirujano):
-        self.cirujanos.append(cirujano)
+    def disponible_para_operar(self):
+        return self.disponible
 
-    def agregar_vehiculo(self, vehiculo):
-        self.vehiculos.append(vehiculo)
+    def tiene_especialidad_para(self, organo):
+        return organo in self.especialidades
 
-    def asignar_cirujano(self, organo):
-        for cirujano in self.cirujanos:
-            if cirujano.disponible_para_operar() and cirujano.tiene_especialidad_para(organo):
-                cirujano.marcar_ocupado()
-                return cirujano
-        # Si no hay especializado, buscar general
-        for cirujano in self.cirujanos:
-            if cirujano.disponible_para_operar() and cirujano.es_general():
-                cirujano.marcar_ocupado()
-                return cirujano
-        return None  # No hay cirujanos disponibles
+    def es_general(self):
+        # Asumimos que ser general significa tener la especialidad 'general'
+        return 'general' in self.especialidades
 
-    def asignar_vehiculo(self, destino):
-        if self.provincia != destino.provincia:
-            tipo = "avion"
-        elif self.partido != destino.partido:
-            tipo = "helicoptero"
-        else:
-            tipo = "ambulancia"
+    def marcar_ocupado(self):
+        self.disponible = False
 
-        vehiculos_filtrados = [v for v in self.vehiculos if v.tipo == tipo]
-        if not vehiculos_filtrados:
-            return None
+    def marcar_disponible(self):
+        self.disponible = True
 
-        # Elegir el de mayor velocidad
-        vehiculos_filtrados.sort(key=lambda v: v.velocidad, reverse=True)
-        return vehiculos_filtrados[0]
+    def __str__(self):
+        est = "disponible" if self.disponible else "ocupado"
+        return f"Cirujano {self.nombre} ({est}), especialidades: {', '.join(self.especialidades)}"
