@@ -1,5 +1,5 @@
 #clase donante
-from paciente import Paciente
+from clases.paciente import Paciente
 
 class Donante(Paciente):
     def __init__(self, nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro_salud,
