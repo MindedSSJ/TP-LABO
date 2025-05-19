@@ -1,30 +1,33 @@
-from paciente import paciente
+#clase receptor
+from paciente import Paciente
 
-class receptor(paciente):
-    
-    def __init__(self, nombre, dni, tipo_sangre, organo_necesitado, nacimiento, sexo, telefono, centro_salud, fecha_listado,
-                  prioridad, patologia, estado):
-        
+class Receptor(Paciente):
+    def __init__(self, nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro_salud,
+                 organo_necesitado, fecha_listado, prioridad, patologia, estado):
         super().__init__(nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro_salud)
 
-        self.organo_necesitado = organo_necesitado
-        self.fecha_listado = fecha_listado
-        self.prioridad = prioridad
+        self.organo_necesitado = organo_necesitado  # string: "corazón", "hígado", etc.
+        self.fecha_listado = fecha_listado  # datetime.date
+        self.prioridad = prioridad  # número entero
         self.patologia = patologia
-        self.estado = estado
-        
+        self.estado = estado  # "Estable" o "Inestable"
 
-        def match(self, donante):
-            #preguntar a agus si no deberiamos hacer tambien que el tipo de sangre coincida para hacer el match
-            
-            if self.organo_necesitado in donante.lista_organo and self.tipo_sangre == donante.tipo_sangre:
-                print("Match encontrado para el paciente {receptor.nombre}, organo otorgano por {donante.nombre}")
+    def match(self, donante):
+        """
+        Verifica si el donante tiene un órgano compatible con el receptor.
+        Coincide por tipo de órgano y tipo de sangre.
+        """
+        for organo in donante.lista_organos:
+            if organo.tipo == self.organo_necesitado and donante.tipo_sangre == self.tipo_sangre:
+                print(f"Match encontrado para el paciente {self.nombre}, órgano otorgado por {donante.nombre}")
                 return True
-            else:
-                print("no hay match para el receptor {receptor.nombre}")
-                return False
-            
-        def cambio_prioridad(self):
-            #preguntar agus jeje
-            return
-            
+        print(f"No hay match para el receptor {self.nombre}")
+        return False
+
+    def cambio_prioridad(self):
+        """
+        Si el trasplante falla, se eleva la prioridad y se cambia el estado a 'Inestable'.
+        """
+        self.prioridad = 1  # Asumiendo que 1 es la máxima prioridad
+        self.estado = "Inestable"
+        print(f"La prioridad de {self.nombre} fue actualizada a {self.prioridad} y su estado a {self.estado}.")
