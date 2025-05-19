@@ -1,8 +1,8 @@
 from clases.donante import Donante
 from clases.receptor import Receptor
-from organos import Organo
-from Centro_de_salud import CentroDeSalud
-from incuncai import Incucai
+from clases.organos import Organo
+from clases.Centro_de_salud import CentroDeSalud
+from clases.incuncai import Incucai
 
 # Crear centros de salud
 centro1 = CentroDeSalud("Hospital Central", "Calle Falsa 123", "San Martín", "Buenos Aires", "1122334455")

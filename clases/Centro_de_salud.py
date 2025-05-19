@@ -1,3 +1,6 @@
+from vehiculo import Vehiculo
+from cirujano import Cirujano
+
 class CentroDeSalud:
     def __init__(self, nombre, direccion, partido, provincia, telefono):
         self.nombre = nombre

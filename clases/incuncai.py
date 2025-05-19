@@ -1,3 +1,8 @@
+from donante import Donante
+from receptor import Receptor
+from Centro_de_salud import CentroDeSalud
+
+
 class Incucai:
     def __init__(self):
         self.lista_donantes = []
