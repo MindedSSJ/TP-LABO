@@ -5,11 +5,11 @@ from clases.incuncai import *
 def crear_centro_salud():
     try:
         nombre = input("Nombre del centro de salud: ")
-        direccion = int(input("Dirección: "))
+        direccion = input("Dirección: ")
         partido = input("Partido: ")
         provincia = input("Provincia: ")
         telefono = int(input("Teléfono: "))
-        return print(CentroDeSalud(nombre, direccion, partido, provincia, telefono))
+        return CentroDeSalud(nombre, direccion, partido, provincia, telefono)
     except Exception as e:
         print(f"[ERROR] al crear centro de salud: {e}")
         return None
@@ -34,8 +34,8 @@ def crear_donante(centro_salud):
                 break
             organos.append(Organo(tipo, fecha_ablacion, hora_ablacion))
 
-        return print(Donante(nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro_salud,
-                       fecha_muerte, hora_muerte, fecha_ablacion, hora_ablacion, organos))
+        return Donante(nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro_salud,
+                       fecha_muerte, hora_muerte, fecha_ablacion, hora_ablacion, organos)
     except Exception as e:
         print(f"[ERROR] al crear donante: {e}")
         return None
@@ -54,8 +54,8 @@ def crear_receptor(centro_salud):
         patologia = input("Patología: ")
         estado = input("Estado: ")
 
-        return print(Receptor(nombre, dni, tipo_sangre, organo_necesitado, nacimiento, sexo,
-                        telefono, centro_salud, fecha_listado, prioridad, patologia, estado))
+        return Receptor(nombre, dni, tipo_sangre, organo_necesitado, nacimiento, sexo,
+                        telefono, centro_salud, fecha_listado, prioridad, patologia, estado)
     except Exception as e:
         print(f"[ERROR] al crear receptor: {e}")
         return None
@@ -72,7 +72,6 @@ def main():
 
         incucai = Incucai()
         incucai.agregar_centro_salud(centro)
-        print(f"Centro de salud '{centro.nombre}' agregado correctamente.")
 
         print("Ingrese los datos del donante y receptor.")
         donante = crear_donante(centro)
@@ -82,6 +81,7 @@ def main():
         receptor = crear_receptor(centro)
         if receptor:
             incucai.agregar_receptor(receptor)
+        
 
         if receptor and donante:
             print("\n== Buscando MATCH entre donante y receptor ==")
