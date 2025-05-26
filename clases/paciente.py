@@ -1,5 +1,5 @@
 #clase paciente
-from persona import Persona
+from .persona import Persona
 from abc import ABC
 
 class Paciente(Persona, ABC):

@@ -1,12 +1,12 @@
 #clase donante
-from paciente import Paciente
-from organos import Organo  # asegurate que el archivo se llame organo.py
+from .paciente import Paciente
+from .organos import Organo  # asegurate que el archivo se llame organo.py
 
 class Donante(Paciente):
     def __init__(self, nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro_salud,
                  fecha_muerte, hora_muerte, fecha_ablacion, hora_ablacion, lista_organos):
         
-        super().__init__("donante", nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro_salud)
+        super().__init__(nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro_salud)
         self.fecha_muerte = fecha_muerte
         self.hora_muerte = hora_muerte
         self.fecha_ablacion = fecha_ablacion
@@ -16,9 +16,9 @@ class Donante(Paciente):
     def tiene_organos(self):
         disponibles = [organo for organo in self.lista_organos if organo.esta_disponible()]
         if not disponibles:
-            print("❌ El donante no tiene órganos viables para donar.")
+            print("El donante no tiene órganos viables para donar.")
             return False
-        print("✅ Órganos viables para donar:")
+        print("Órganos viables para donar:")
         for organo in disponibles:
             print(f" - {organo}")
             return True
@@ -31,9 +31,9 @@ class Donante(Paciente):
         for organo in self.lista_organos:
             if organo.tipo_organos == tipo_organo.lower() and organo.esta_disponible():
                 self.lista_organos.remove(organo)
-                print(f"✅ Órgano '{tipo_organo}' extraído de la lista del donante.")
+                print(f"Órgano '{tipo_organo}' extraído de la lista del donante.")
                 return organo
-        print(f"❌ No se encontró un órgano disponible de tipo '{tipo_organo}'.")
+        print(f"No se encontró un órgano disponible de tipo '{tipo_organo}'.")
         return None
 
 

@@ -1,5 +1,6 @@
 #clase receptor
-from paciente import Paciente
+from .paciente import Paciente
+from  .organos import Organo
 
 class Receptor(Paciente):
     def __init__(self, nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro_salud,
@@ -18,7 +19,7 @@ class Receptor(Paciente):
         Coincide por tipo de órgano y tipo de sangre.
         """
         for organo in donante.lista_organos:
-            if organo.tipo == self.organo_necesitado and donante.tipo_sangre == self.tipo_sangre:
+            if organo.tipo_organos == self.organo_necesitado and donante.tipo_sangre == self.tipo_sangre:
                 print(f"Match encontrado para el paciente {self.nombre}, órgano otorgado por {donante.nombre}")
                 return True
         print(f"No hay match para el receptor {self.nombre}")

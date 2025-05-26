@@ -1,5 +1,5 @@
 from clases.organos import Organo
-from clases.Centro_de_salud import CentroDeSalud
+from clases.Centro_de_salud import *
 from clases.incuncai import *
 
 # Crear centros de salud
@@ -44,8 +44,8 @@ receptor1 = Receptor(
 
 # Crear sistema INCUCAI
 sistema_incucai = Incucai()
-sistema_incucai.agregar_centro(centro1)
-sistema_incucai.agregar_centro(centro2)
+sistema_incucai.agregar_centro_salud(centro1)
+sistema_incucai.agregar_centro_salud(centro2)
 sistema_incucai.agregar_donante(donante1)
 sistema_incucai.agregar_receptor(receptor1)
 
@@ -58,10 +58,10 @@ print("\n⛓ Intentando match con el receptor...")
 if receptor1.match(donante1):
     organo_donado = donante1.organo_donado(receptor1.organo_necesitado)
     if organo_donado:
-        print(f"\n🫀 Órgano {organo_donado.tipo_organos} fue asignado a {receptor1.nombre}")
+        print(f"\nÓrgano {organo_donado.tipo_organos} fue asignado a {receptor1.nombre}")
 else:
-    print("❌ No se pudo realizar el trasplante.")
+    print("No se pudo realizar el trasplante.")
 
 # Mostrar órganos restantes
-print("\n📦 Órganos restantes del donante:")
+print("\nÓrganos restantes del donante:")
 donante1.tiene_organos()

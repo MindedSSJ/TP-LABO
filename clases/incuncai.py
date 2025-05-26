@@ -1,6 +1,6 @@
-from donante import Donante
-from receptor import Receptor
-from Centro_de_salud import CentroDeSalud
+from .donante import Donante
+from .receptor import Receptor
+from .Centro_de_salud import CentroDeSalud
 
 
 class Incucai:
@@ -40,22 +40,22 @@ class Incucai:
         # Asignar cirujano
         cirujano = centro_donante.asignar_cirujano(receptor.organo_necesitado)
         if not cirujano:
-            print("❌ No hay cirujano disponible para este órgano.")
+            print("No hay cirujano disponible para este órgano.")
             return False
 
         # Asignar vehículo
         vehiculo = centro_donante.asignar_vehiculo(centro_receptor)
         if not vehiculo:
-            print("❌ No hay vehículo disponible para trasladar el órgano.")
+            print("No hay vehículo disponible para trasladar el órgano.")
             return False
 
         # Sacar el órgano del donante
         organo_donado = donante.organo_donado(receptor.organo_necesitado)
         if not organo_donado:
-            print("❌ El órgano ya fue asignado o no está disponible.")
+            print("El órgano ya fue asignado o no está disponible.")
             return False
 
-        print(f"✅ Match y coordinación exitosa:")
+        print(f"Match y coordinación exitosa:")
         print(f"   - Donante: {donante.nombre}")
         print(f"   - Receptor: {receptor.nombre}")
         print(f"   - Cirujano asignado: {cirujano.nombre}")

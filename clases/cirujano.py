@@ -1,7 +1,7 @@
 # Si hereda de Persona:
-from persona import Persona
+from .persona import Persona
 
-class Cirujano:
+class Cirujano():
 
     def __init__(self, nombre, especialidades, disponible=True):
         """
