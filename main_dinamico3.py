@@ -7,6 +7,24 @@ donantes = []
 receptores = []
 centros_salud = []
 
+def input_sexo(mensaje):
+    valor_valido = {"M", "F"}
+    while True:
+        valor = input(mensaje).upper()
+        if valor in valor_valido:
+            return valor
+        else:
+            print("Genero no aceptado. Intente con M = Masculino, F = femenino")
+
+def input_sangre(mensaje):
+    valor_valido = {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"}
+    while True:
+        valor = input(mensaje).upper()
+        if valor  in valor_valido:
+            return valor
+        else:
+            print("Tipo de sangre no válido. Intente con A+, A-, B+, B-, AB+, AB-, O+ u O-.") 
+
 def input_numerico(mensaje):
     while True:
         valor = input(mensaje)
@@ -42,11 +60,11 @@ def seleccionar_centro():
 
 def cargar_centro_salud():
     print("\n🏥 Cargando nuevo Centro de Salud:")
-    nombre = input("Nombre: ")
+    nombre = input_texto("Nombre: ")
     direccion = input("Dirección: ")
     partido = input("Partido: ")
     provincia = input("Provincia: ")
-    telefono = input("Teléfono: ")
+    telefono = input_numerico("Teléfono: ")
     
     centro = CentroDeSalud(nombre, direccion, partido, provincia, telefono)
     centros_salud.append(centro)
@@ -60,21 +78,21 @@ def cargar_donante():
 
     nombre = input_texto("Nombre: ")
     dni = input_numerico("DNI: ")
-    nacimiento = input("Fecha de nacimiento (YYYY-MM-DD): ")
+    nacimiento = input_numerico("Fecha de nacimiento (YYYY-MM-DD): ")
     sexo = input_texto("Sexo (M/F): ")
-    telefono = input("Teléfono: ")
-    tipo_sangre = input("Tipo de sangre: ")
-    fecha_muerte = input("Fecha de muerte (YYYY-MM-DD): ")
-    hora_muerte = input("Hora de muerte (HH:MM): ")
-    fecha_ablacion = input("Fecha de ablación (YYYY-MM-DD): ")
-    hora_ablacion = input("Hora de ablación (HH:MM): ")
+    telefono = input_numerico("Teléfono: ")
+    tipo_sangre = input_sangre("Tipo de sangre: ")
+    fecha_muerte = input_numerico("Fecha de muerte (YYYY-MM-DD): ")
+    hora_muerte = input_numerico("Hora de muerte (HH:MM): ")
+    fecha_ablacion = input_numerico("Fecha de ablación (YYYY-MM-DD): ")
+    hora_ablacion = input_numerico("Hora de ablación (HH:MM): ")
 
     lista_organos = []
     while True:
-        tipo_organo = input("Agregar órgano a donar (escriba 'fin' para terminar): ").lower()
-        if tipo_organo == "fin":
+        tipo_organos = input("Agregar órgano a donar (escriba 'fin' para terminar): ").lower()
+        if tipo_organos == "fin":
             break
-        lista_organos.append(Organo(tipo_organo, fecha_ablacion, hora_ablacion))
+        lista_organos.append(Organo(tipo_organos, fecha_ablacion, hora_ablacion))
 
     donante = Donante(nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro,
                       fecha_muerte, hora_muerte, fecha_ablacion, hora_ablacion, lista_organos)
@@ -89,12 +107,12 @@ def cargar_receptor():
 
     nombre = input_texto("Nombre: ")
     dni = input_numerico("DNI: ")
-    nacimiento = input("Fecha de nacimiento (YYYY-MM-DD): ")
-    sexo = input_texto("Sexo (M/F): ")
-    telefono = input("Teléfono: ")
-    tipo_sangre = input("Tipo de sangre: ")
-    organo_necesitado = input("Órgano que necesita: ")
-    fecha_listado = input("Fecha de ingreso al listado (YYYY-MM-DD): ")
+    nacimiento = input_numerico("Fecha de nacimiento (YYYY-MM-DD): ")
+    sexo = input_sexo("Sexo (M/F): ")
+    telefono = input_numerico("Teléfono: ")
+    tipo_sangre = input_sangre("Tipo de sangre: ")
+    organo_necesitado = input_texto("Órgano que necesita: ")
+    fecha_listado = input_numerico("Fecha de ingreso al listado (YYYY-MM-DD): ")
     prioridad = input_numerico("Prioridad (1-5): ")
     patologia = input("Patología: ")
     estado = input("Estado actual: ")
@@ -111,7 +129,7 @@ def ver_listas():
 
     print("\n📋 Donantes registrados:")
     for d in donantes:
-        print(f"🧑 {d.nombre} - Órganos: {[o.tipo for o in d.lista_organos]}")
+        print(f"🧑 {d.nombre} - Órganos: {[o.tipo_organos for o in d.lista_organos]}")
 
     print("\n📋 Receptores registrados:")
     for r in receptores:
