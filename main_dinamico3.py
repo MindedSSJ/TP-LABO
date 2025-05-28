@@ -135,6 +135,7 @@ def ver_listas():
     for r in receptores:
         print(f"🧑 {r.nombre} - Necesita: {r.organo_necesitado}")
 
+
 def main():
     while True:
         print("\n--- MENÚ PRINCIPAL ---")
@@ -142,7 +143,8 @@ def main():
         print("2. Registrar Donante")
         print("3. Registrar Receptor")
         print("4. Ver Listados")
-        print("5. Salir")
+        print("5. Ejecutar el sistema")
+        print("6. Salir")
         opcion = input("Seleccione una opción: ")
 
         if opcion == "1":
@@ -154,6 +156,21 @@ def main():
         elif opcion == "4":
             ver_listas()
         elif opcion == "5":
+            print("\n🔄 Ejecutando el sistema...")
+            if not donantes or not receptores:
+                print("⚠️ No hay donantes o receptores registrados.")
+                continue
+            
+            for receptor in receptores:
+                for donante in donantes:
+                    if receptor.match(donante):
+                        organo_donado = donante.organo_donado(receptor.organo_necesitado)
+                        if organo_donado:
+                            print(f"✅ Órgano {organo_donado.tipo_organos} asignado a {receptor.nombre}")
+                        else:
+                            print(f"❌ No se pudo donar el órgano a {receptor.nombre}")
+            print("🔄 Sistema ejecutado con éxito.\n")
+        elif opcion == "6":
             print("👋 Cerrando sistema...")
             break
         else:
