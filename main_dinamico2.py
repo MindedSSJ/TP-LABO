@@ -2,6 +2,24 @@ from clases.organos import Organo
 from clases.Centro_de_salud import *
 from clases.incuncai import *
 
+
+def input_sexo(mensaje):
+    valor_valido = {"M", "F"}
+    while True:
+        valor = input(mensaje).upper()
+        if valor in valor_valido:
+            return valor
+        else:
+            print("Genero no aceptado. Intente con M = Masculino, F = femenino")
+def input_sangre(mensaje):
+    valor_valido = {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"}
+    while True:
+        valor = input(mensaje).upper()
+        if valor  in valor_valido:
+            return valor
+        else:
+            print("Tipo de sangre no válido. Intente con A+, A-, B+, B-, AB+, AB-, O+ u O-.") 
+
 def input_numerico(mensaje):
     while True:
         valor = input(mensaje)
@@ -19,7 +37,7 @@ def input_texto(mensaje):
 
 def crear_centro_salud():
     try:
-        nombre = input_texto("Nombre del centro de salud: ")
+        nombre = input("Nombre del centro de salud: ")
         direccion = input("Dirección: ")
         partido = input_texto("Partido: ")
         provincia = input_texto("Provincia: ")
@@ -34,9 +52,9 @@ def crear_donante(centro_salud):
         nombre = input_texto("Nombre del donante: ")
         dni = input_numerico("DNI: ")
         nacimiento = input("Fecha de nacimiento (YYYY-MM-DD): ")
-        sexo = input("Sexo (M/F): ")
+        sexo = input_sexo("Sexo (M/F): ")
         telefono = input_numerico("Teléfono: ")
-        tipo_sangre = input("Tipo de sangre: ")
+        tipo_sangre = input_sangre("Tipo de sangre: ")
         fecha_muerte = input_numerico("Fecha de muerte (YYYY-MM-DD): ")
         hora_muerte = input_numerico("Hora de muerte (HH:MM): ")
         fecha_ablacion = input_numerico("Fecha de ablación (YYYY-MM-DD): ")
@@ -57,17 +75,17 @@ def crear_donante(centro_salud):
 
 def crear_receptor(centro_salud):
     try:
-        nombre = pedir_texto("Nombre del receptor: ")
-        dni = pedir_entero("DNI: ")
-        nacimiento = input("Fecha de nacimiento (YYYY-MM-DD): ")
-        sexo = input("Sexo (M/F): ")
-        telefono = pedir_entero("Teléfono: ")
-        tipo_sangre = input("Tipo de sangre: ")
+        nombre = input_texto("Nombre del receptor: ")
+        dni = input_numerico("DNI: ")
+        nacimiento = input_numerico("Fecha de nacimiento (YYYY-MM-DD): ")
+        sexo = input_sexo("Sexo (M/F): ")
+        telefono = input_numerico("Teléfono: ")
+        tipo_sangre = input_sangre("Tipo de sangre: ")
         organo_necesitado = input("Órgano necesario: ")
         fecha_listado = input("Fecha de ingreso al listado (YYYY-MM-DD): ")
-        prioridad = pedir_entero("Prioridad (1=alta, 2=media, 3=baja): ")
+        prioridad = input_numerico("Prioridad (1=alta, 2=media, 3=baja): ")
         patologia = input("Patología: ")
-        estado = input("Estado: ")
+        estado = input_texto("Estado: ")
 
         return Receptor(nombre, dni, tipo_sangre, organo_necesitado, nacimiento, sexo,
                         telefono, centro_salud, fecha_listado, prioridad, patologia, estado)
