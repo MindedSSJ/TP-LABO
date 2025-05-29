@@ -7,6 +7,20 @@ donantes = []
 receptores = []
 centros_salud = []
 
+def input_fecha(mensaje):
+    while True:
+        valor = input(mensaje)
+        try:
+            return datetime.strptime(valor, "%Y-%m-%d").date()
+        except ValueError:
+            print("❌ Formato incorrecto. Use YYYY-MM-DD.")
+def input_hora(mensaje):
+    while True:
+        valor = input(mensaje)
+        try:
+            return datetime.strptime(valor, "%H:%M").time()
+        except ValueError:
+            print("❌ Formato de hora incorrecto. Use HH:MM.")
 def input_sexo(mensaje):
     valor_valido = {"M", "F"}
     while True:
@@ -78,14 +92,14 @@ def cargar_donante():
 
     nombre = input_texto("Nombre: ")
     dni = input_numerico("DNI: ")
-    nacimiento = input_numerico("Fecha de nacimiento (YYYY-MM-DD): ")
-    sexo = input_texto("Sexo (M/F): ")
+    nacimiento = input_fecha("Fecha de nacimiento (YYYY-MM-DD): ")
+    sexo = input_sexo("Sexo (M/F): ")
     telefono = input_numerico("Teléfono: ")
     tipo_sangre = input_sangre("Tipo de sangre: ")
-    fecha_muerte = input_numerico("Fecha de muerte (YYYY-MM-DD): ")
-    hora_muerte = input_numerico("Hora de muerte (HH:MM): ")
-    fecha_ablacion = input_numerico("Fecha de ablación (YYYY-MM-DD): ")
-    hora_ablacion = input_numerico("Hora de ablación (HH:MM): ")
+    fecha_muerte = input_fecha("Fecha de muerte (YYYY-MM-DD): ")
+    hora_muerte = input_hora("Hora de muerte (HH:MM): ")
+    fecha_ablacion = input_fecha("Fecha de ablación (YYYY-MM-DD): ")
+    hora_ablacion = input_hora("Hora de ablación (HH:MM): ")
 
     lista_organos = []
     while True:
@@ -107,18 +121,18 @@ def cargar_receptor():
 
     nombre = input_texto("Nombre: ")
     dni = input_numerico("DNI: ")
-    nacimiento = input_numerico("Fecha de nacimiento (YYYY-MM-DD): ")
+    nacimiento = input_fecha("Fecha de nacimiento (YYYY-MM-DD): ")
     sexo = input_sexo("Sexo (M/F): ")
     telefono = input_numerico("Teléfono: ")
     tipo_sangre = input_sangre("Tipo de sangre: ")
-    organo_necesitado = input_texto("Órgano que necesita: ")
-    fecha_listado = input_numerico("Fecha de ingreso al listado (YYYY-MM-DD): ")
+    organo_necesitado = input_texto("Órgano que necesita: ").lower()
+    fecha_listado = input_fecha("Fecha de ingreso al listado (YYYY-MM-DD): ")
     prioridad = input_numerico("Prioridad (1-5): ")
     patologia = input("Patología: ")
     estado = input("Estado actual: ")
 
-    receptor = Receptor(nombre, dni, tipo_sangre, organo_necesitado, nacimiento, sexo,
-                        telefono, centro, fecha_listado, prioridad, patologia, estado)
+    receptor = Receptor(nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro,
+                 organo_necesitado, fecha_listado, prioridad, patologia, estado)
     receptores.append(receptor)
     print("✅ Receptor registrado.\n")
 
