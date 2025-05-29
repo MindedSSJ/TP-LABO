@@ -32,3 +32,4 @@ class Receptor(Paciente):
         self.prioridad = 1  # Asumiendo que 1 es la máxima prioridad
         self.estado = "Inestable"
         print(f"La prioridad de {self.nombre} fue actualizada a {self.prioridad} y su estado a {self.estado}.")
+        return self.prioridad, self.estado
