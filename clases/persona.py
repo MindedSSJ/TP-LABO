@@ -3,12 +3,12 @@ from abc import ABC, abstractmethod
 
 class Persona(ABC):
     def __init__(self, nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro_salud):
-        self.nombre = nombre
-        self.dni = dni
-        self.nacimiento = nacimiento  # datetime.date
-        self.sexo = sexo
-        self.telefono = telefono
-        self.tipo_sangre = tipo_sangre
+        self.__nombre = nombre
+        self.__dni = dni
+        self.__nacimiento = nacimiento  # datetime.date
+        self.__sexo = sexo
+        self.__telefono = telefono
+        self.__tipo_sangre = tipo_sangre
         self.centro_salud = centro_salud
 
     def info(self):
