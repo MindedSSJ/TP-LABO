@@ -149,6 +149,20 @@ def ver_listas():
     for r in receptores:
         print(f"🧑 {r.nombre} - Necesita: {r.organo_necesitado}")
 
+def registrar_cirujano():
+    print("\n Registrar Cirujano en Centro de Salud")
+    centro = seleccionar_centro()
+    if not centro:
+        return
+
+    nombre = input_texto("Nombre del cirujano: ")
+    especialidades = input("Especialidades (separadas por coma): ").lower().split(",")
+    especialidades = [e.strip() for e in especialidades]
+
+    cirujano = Cirujano(nombre, especialidades)
+    centro.agregar_cirujano(cirujano)
+    print(f"✅ Cirujano {nombre} registrado con especialidades: {', '.join(especialidades)}")
+
 
 def main():
     while True:
@@ -158,7 +172,8 @@ def main():
         print("3. Registrar Receptor")
         print("4. Ver Listados")
         print("5. Ejecutar el sistema")
-        print("6. Salir")
+        print("6. Registrar cirujano")
+        print("7. Salir")
         opcion = input("Seleccione una opción: ")
 
         if opcion == "1":
@@ -183,8 +198,17 @@ def main():
                             print(f"✅ Órgano {organo_donado.tipo_organos} asignado a {receptor.nombre}")
                         else:
                             print(f"❌ No se pudo donar el órgano a {receptor.nombre}")
+                            cirujano = donante.centro_salud.asignar_cirujano(organo_donado.tipo_organos)
+                            if cirujano:
+                                print(f" Cirujano asignado: {cirujano.nombre}")
+                            else:
+                                print("No hay cirujano disponible o especializado en ese órgano.")
+                else:
+                    print(f"❌ No se pudo donar el órgano a {receptor.nombre}")            
             print("🔄 Sistema ejecutado con éxito.\n")
         elif opcion == "6":
+            registrar_cirujano()
+        elif opcion == "7":
             print("👋 Cerrando sistema...")
             break
         else:
