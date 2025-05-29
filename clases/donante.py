@@ -7,8 +7,8 @@ class Donante(Paciente):
                  fecha_muerte, hora_muerte, fecha_ablacion, hora_ablacion, lista_organos):
         
         super().__init__(nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro_salud)
-        self._fecha_muerte = fecha_muerte
-        self._hora_muerte = hora_muerte
+        self.fecha_muerte = fecha_muerte
+        self.hora_muerte = hora_muerte
         self.fecha_ablacion = fecha_ablacion
         self.hora_ablacion = hora_ablacion
         self.lista_organos = lista_organos  # lista de objetos Organo
