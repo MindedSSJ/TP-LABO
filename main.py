@@ -1,6 +1,6 @@
 from clases.organos import Organo
 from clases.Centro_de_salud import *
-from clases.incuncai import *
+from clases.incucai import *
 
 # Crear centros de salud
 centro1 = CentroDeSalud("Hospital Central", "Calle Falsa 123", "San Martín", "Buenos Aires", "1122334455")

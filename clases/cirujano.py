@@ -8,8 +8,8 @@ class Cirujano():
         especialidades: lista de órganos o tipos en los que el cirujano es experto.
         disponible: indica si puede operar actualmente.
         """
-        self.__nombre = nombre
-        self.__especialidades = especialidades  # lista de strings
+        self.nombre = nombre
+        self.especialidades = especialidades  # lista de strings
         self.disponible = disponible
 
     def disponible_para_operar(self):

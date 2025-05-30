@@ -1,6 +1,6 @@
 from clases.organos import Organo
 from clases.Centro_de_salud import *
-from clases.incuncai import *
+from clases.incucai import *
 
 
 def input_sexo(mensaje):

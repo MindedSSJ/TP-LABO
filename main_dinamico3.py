@@ -1,6 +1,6 @@
 from clases.organos import Organo
 from clases.Centro_de_salud import *
-from clases.incuncai import *
+from clases.incucai import *
 from datetime import datetime
 
 """
@@ -13,6 +13,9 @@ asignación de órganos a receptores según su compatibilidad y prioridad.
 donantes = []
 receptores = []
 centros_salud = []
+vehiculos = [Vehiculo("ambulancia", 80),
+             Vehiculo("helicoptero", 150),
+             Vehiculo("avion", 600)]
 
 def input_fecha(mensaje):
     """ 
@@ -140,16 +143,32 @@ def cargar_donante():
     fecha_ablacion = input_fecha("Fecha de ablación (YYYY-MM-DD): ")
     hora_ablacion = input_hora("Hora de ablación (HH:MM): ")
 
+    valid_organos = {"corazon", "pulmon", "higado", "riñon", "pancreas", "intestino"}
+    print("Órganos válidos:", ", ".join(valid_organos))
+    organos = input("Ingrese los órganos a donar, separados por coma: ").lower().split(",")
+
     lista_organos = []
-    while True:
-        tipo_organos = input("Agregar órgano a donar (escriba 'fin' para terminar): ").lower()
-        if tipo_organos == "fin":
-            break
-        lista_organos.append(Organo(tipo_organos, fecha_ablacion, hora_ablacion))
+    for tipo in organos:
+        tipo = tipo.strip()
+        if tipo in valid_organos:
+            if tipo not in [o.tipo_organos for o in lista_organos]:
+                lista_organos.append(Organo(tipo, fecha_ablacion, hora_ablacion))
+            else:
+                print(f"⚠️ El órgano '{tipo}' ya fue ingresado. Ignorado.")
+        else:
+            print(f"❌ Órgano inválido: '{tipo}'. No será registrado.")
+
+        if not lista_organos:
+            print("⚠️ No se registró ningún órgano válido. Cancelando registro de donante.")
+        return
 
     donante = Donante(nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro,
                       fecha_muerte, hora_muerte, fecha_ablacion, hora_ablacion, lista_organos)
     donantes.append(donante)
+
+    for d in donantes:
+        Incucai.agregar_donante(d)
+    
     print("✅ Donante registrado.\n")
 
 def cargar_receptor():
@@ -170,14 +189,33 @@ def cargar_receptor():
     tipo_sangre = input_sangre("Tipo de sangre: ")
     organo_necesitado = input_texto("Órgano que necesita: ").lower()
     fecha_listado = input_fecha("Fecha de ingreso al listado (YYYY-MM-DD): ")
-    prioridad = input_numerico("Prioridad (1-5): ")
+    # Validación de prioridad
+    while True:
+        prioridad = input_numerico("Prioridad del 1 al 5 (1: baja - 5: alta): ")
+        if 1 <= prioridad <= 5:
+            break
+    print("La prioridad debe estar entre 1 y 5.")
+
     patologia = input("Patología: ")
     estado = input("Estado actual: ")
 
     receptor = Receptor(nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro,
                  organo_necesitado, fecha_listado, prioridad, patologia, estado)
     receptores.append(receptor)
+
+    for r in receptores:
+        Incucai.agregar_receptor(r)
+    
     print("Receptor registrado.\n")
+
+def ver_vehiculos():
+    if not vehiculos:
+        print("No hay vehículos registrados.")
+        return
+    else:
+        for v in vehiculos:
+            print(f"🚐 {v.tipo} - Velocidad: {v.velocidad} km/h")
+
 
 def ver_listas():
     """ 
@@ -190,10 +228,12 @@ def ver_listas():
     print("\nDonantes registrados:")
     for d in donantes:
         print(f"{d.nombre} - Órganos: {[o.tipo_organos for o in d.lista_organos]}")
+        
 
     print("\n📋 Receptores registrados:")
     for r in receptores:
         print(f"{r.nombre} - Necesita: {r.organo_necesitado}")
+        
 
 def registrar_cirujano():
     """
@@ -227,7 +267,8 @@ def main():
         print("4. Ver Listados")
         print("5. Registrar cirujano")
         print("6. Ejecutar el sistema")
-        print("7. Salir")
+        print("7. Ver vehículos")
+        print("8. Salir")
         opcion = input("Seleccione una opción: ")
 
         if opcion == "1":
@@ -260,9 +301,12 @@ def main():
                             else:
                                 print("No hay cirujano disponible o especializado en ese órgano.")
                     else:
-                        print(f"No se pudo donar el órgano a {receptor.nombre}")            
+                        print(f"No se pudo donar el órgano a {receptor.nombre}")    
+   
             print("🔄 Sistema ejecutado con éxito.\n")
         elif opcion == "7":
+            ver_vehiculos()
+        elif opcion == "8":
             print("Cerrando sistema...")
             break
         else:
@@ -270,3 +314,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

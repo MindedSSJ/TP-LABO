@@ -1,6 +1,7 @@
 from .donante import Donante
 from .receptor import Receptor
 from .Centro_de_salud import CentroDeSalud
+import random
 
 
 class Incucai:
@@ -54,12 +55,25 @@ class Incucai:
         if not organo_donado:
             print("El órgano ya fue asignado o no está disponible.")
             return False
+        
+        # Simular distancia y tráfico"
+        distancia = random.randint(50, 800)  # en km
+        trafico = random.randint(0, 50)      # nivel de tráfico arbitrario
+        # Calcular tiempo estimado de transporte
+        tiempo_estimado = vehiculo.calcular_tiempo(distancia, trafico)
 
         print(f"Match y coordinación exitosa:")
         print(f"   - Donante: {donante.nombre}")
         print(f"   - Receptor: {receptor.nombre}")
         print(f"   - Cirujano asignado: {cirujano.nombre}")
         print(f"   - Vehículo asignado: {vehiculo.tipo} a {vehiculo.velocidad} km/h")
+        print(f"   - Distancia: {distancia} km")
+        if vehiculo.tipo == "ambulancia":
+            print(f"   - Tráfico: {trafico}")
+        else:
+            print(f"   - Tráfico: (ignorado por ser vehículo aéreo)")
+        print(f"   - Tiempo estimado de viaje: {tiempo_estimado} horas")
+
         return True
 
     def __str__(self):
