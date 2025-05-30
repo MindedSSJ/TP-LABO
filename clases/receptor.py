@@ -5,6 +5,21 @@ from  .organos import Organo
 class Receptor(Paciente):
     def __init__(self, nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro_salud,
                  organo_necesitado, fecha_listado, prioridad, patologia, estado):
+        """
+        nombre: nombre que representa al receptor
+        dni: numero de dni del receptor
+        nacimiento: fecha de nacimiento del receptor
+        sexo: Masculino o Femenino
+        telefono: numero personal de telefono del receptor
+        tipo_sangre: Tipo de sangre del receptor 'A+, A-, B+, B-, AB+, AB-, O+, O-'
+        centro_salud: centro de salud en el que esta registrado el receptor
+        organo_necesitado: organo que necesita para transplante el receptor
+        fecha_listado: fecha en la que fue ingresado y admitido en la lista de receptores
+        prioridad: prioridad que tiene el receptor, 'alta, media, baja'
+        patologia: patologia que contiene el receptor
+        estado: estado del receptor, 'estable o inestable'
+        """
+
         super().__init__(nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro_salud)
 
         self.organo_necesitado = organo_necesitado  # string: "corazón", "hígado", etc.
