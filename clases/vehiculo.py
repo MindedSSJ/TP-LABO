@@ -12,4 +12,10 @@ class Vehiculo():
         self.velocidad = velocidad
 
     def __str__(self):
+        if self.tipo == "ambulancia":
+            self.velocidad = 100
+        elif self.tipo == "elicoptero" or self.tipo == "avion":
+            self.velocidad = 200
+            
         return f"Vehículo tipo {self.tipo} con velocidad {self.velocidad}"
+    

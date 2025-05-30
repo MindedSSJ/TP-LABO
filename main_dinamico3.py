@@ -24,14 +24,14 @@ def input_fecha(mensaje):
         try:
             return datetime.strptime(valor, "%Y-%m-%d").date()
         except ValueError:
-            print("Formato incorrecto. Use YYYY-MM-DD.")
+            print("Formato incorrecto. Use YYYY-MM-DD (incluya el guión).")
 def input_hora(mensaje):
     while True:
         valor = input(mensaje)
         try:
             return datetime.strptime(valor, "%H:%M").time()
         except ValueError:
-            print("Formato de hora incorrecto. Use HH:MM.")
+            print("Formato de hora incorrecto. Use HH:MM (incluya los dos puntos).")
 def input_sexo(mensaje):
     """
     Solicita el sexo del donante o receptor en el formato pedido.
@@ -150,6 +150,9 @@ def cargar_donante():
     donante = Donante(nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro,
                       fecha_muerte, hora_muerte, fecha_ablacion, hora_ablacion, lista_organos)
     donantes.append(donante)
+    Incucai.agregar_donante(donante) # Agregar el donante a la lista de Incucai
+    # Agregar el donante a la lista de Incucai
+
     print("✅ Donante registrado.\n")
 
 def cargar_receptor():
@@ -176,7 +179,10 @@ def cargar_receptor():
 
     receptor = Receptor(nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro,
                  organo_necesitado, fecha_listado, prioridad, patologia, estado)
+    
     receptores.append(receptor)
+    # Agregar el receptor a la lista de Incucai
+    Incucai.agregar_receptor(receptor)
     print("Receptor registrado.\n")
 
 def ver_listas():
@@ -187,8 +193,9 @@ def ver_listas():
     for c in centros_salud:
         print(f"- {c.nombre} ({c.provincia} - {c.partido})")
 
-    print("\nDonantes registrados:")
-    for d in donantes:
+    print("\nDonantes registrados:") #error
+    for d in Incucai.lista_donantes:
+        print(f"{d.nombre} - DNI: {d.dni}, Tipo de Sangre: {d.tipo_sangre}, Fecha de Ablación: {d.fecha_ablacion}, Hora de Ablación: {d.hora_ablacion}")
         print(f"{d.nombre} - Órganos: {[o.tipo_organos for o in d.lista_organos]}")
 
     print("\n📋 Receptores registrados:")
