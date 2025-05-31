@@ -1,8 +1,8 @@
 from clases.organos import Organo
 from clases.Centro_de_salud import *
 from clases.incucai import *
-from datetime import datetime
-
+from datetime import datetime, timedelta
+import random
 """
 Este sistema permite gestionar un banco de órganos, registrando donantes y receptores, sus organos disponibles y/o necesarios, 
 así como los centros de salud y cirujanos disponibles para realizar las ablaciones y trasplantes. Tambien lleva a cabo la 
@@ -16,6 +16,42 @@ centros_salud = []
 vehiculos = [Vehiculo("ambulancia", 80),
              Vehiculo("helicoptero", 150),
              Vehiculo("avion", 600)]
+
+# Mapa de distancias ficticias entre provincias (en km)
+distancias = {
+    ("Buenos Aires", "Cordoba"): 700,
+    ("Buenos Aires", "Santa Fe"): 500,
+    ("Cordoba", "Santa Fe"): 350,
+    ("Buenos Aires", "Buenos Aires"): 50,
+    ("Cordoba", "Cordoba"): 50,
+    ("Santa Fe", "Santa Fe"): 50,
+    ("Caba", "Caba"): 50,
+}
+
+
+def calcular_distancia(prov_origen, prov_destino):
+    if prov_origen.lower() == prov_destino.lower():
+        return 50  # misma provincia, distancia local
+    return distancias.get((prov_origen, prov_destino)) or distancias.get((prov_destino, prov_origen), 800)
+
+def elegir_vehiculo(prov_origen, prov_destino):
+    distancia = calcular_distancia(prov_origen, prov_destino)
+    trafico = random.randint(10, 50) if prov_origen.lower() == prov_destino.lower() else 0  # solo si es terrestre
+    tipo_preferido = "avion" if distancia > 600 else "helicoptero" if distancia > 200 else "ambulancia"
+
+    for v in vehiculos:
+        if v.tipo == tipo_preferido:
+            tiempo = v.calcular_tiempo(distancia, trafico)
+            print(f"\n🛻 Vehículo asignado: {v.tipo} (Velocidad: {v.velocidad} km/h)")
+            print(f"📏 Distancia: {distancia} km - ⏱️ Tiempo estimado de viaje: {tiempo:.2f} horas\n")
+            return v, tiempo
+
+    # Si no encontró del tipo preferido, usar el primero disponible
+    v = vehiculos[0]
+    tiempo = v.calcular_tiempo(distancia, trafico)
+    print(f"\n🚨 Vehículo por defecto asignado: {v.tipo}")
+    print(f"📏 Distancia: {distancia} km - ⏱️ Tiempo estimado de viaje: {tiempo:.2f} horas\n")
+    return v, tiempo
 
 def input_fecha(mensaje):
     """ 
@@ -160,14 +196,11 @@ def cargar_donante():
 
         if not lista_organos:
             print("⚠️ No se registró ningún órgano válido. Cancelando registro de donante.")
-        return
 
     donante = Donante(nombre, dni, nacimiento, sexo, telefono, tipo_sangre, centro,
                       fecha_muerte, hora_muerte, fecha_ablacion, hora_ablacion, lista_organos)
     donantes.append(donante)
 
-    for d in donantes:
-        Incucai.agregar_donante(d)
     
     print("✅ Donante registrado.\n")
 
@@ -203,8 +236,6 @@ def cargar_receptor():
                  organo_necesitado, fecha_listado, prioridad, patologia, estado)
     receptores.append(receptor)
 
-    for r in receptores:
-        Incucai.agregar_receptor(r)
     
     print("Receptor registrado.\n")
 
@@ -282,28 +313,61 @@ def main():
         elif opcion == "5":
             registrar_cirujano()
         elif opcion == "6":
-            print("\nEjecutando el sistema...")
-            if not donantes or not receptores:
-                print("No hay donantes o receptores registrados.")
-                continue
-            
-            for receptor in receptores:
+            def protocolo_trasplante(donante, receptor, organo_donado):
+                print(f"\n✅ Órgano {organo_donado.tipo_organos} asignado a {receptor.nombre}")
+
+        # 1. Asignar vehículo
+                vehiculo, distancia = elegir_vehiculo(donante.centro_salud.provincia, receptor.centro_salud.provincia)
+                if not vehiculo:
+                    print("❌ No hay vehículo disponible para transporte.")
+                    return False
+
+        # 2. Asignar cirujano para ablación
+                cirujano_donante = donante.centro_salud.asignar_cirujano(organo_donado.tipo_organos)
+                if not cirujano_donante:
+                    print("❌ No hay cirujano disponible para ablación.")
+                    return False
+
+        # 3. Realizar ablación
+                tiempo_actual = datetime.now()
+                organo_donado.fecha_ablacion = tiempo_actual.date()
+                organo_donado.hora_ablacion = tiempo_actual.time()
+                try:
+                    donante.lista_organos.remove(organo_donado)
+                except ValueError:
+                    print("organo ya removido")
+                print(f"🩺 Ablación realizada por {cirujano_donante.nombre} a las {organo_donado.hora_ablacion} del {organo_donado.fecha_ablacion}")
+
+        # 4. Transporte
+                tiempo_traslado_horas = vehiculo.calcular_tiempo(distancia, 0)
+                tiempo_llegada = tiempo_actual + timedelta(hours=tiempo_traslado_horas)
+                print(f"🚗 Vehículo asignado: {vehiculo.tipo} ({vehiculo.velocidad} km/h)")
+                print(f"⏱️ Tiempo estimado de traslado: {tiempo_traslado_horas:.2f} horas")
+
+        # 5. Trasplante
+                cirujano_receptor = receptor.centro_salud.asignar_cirujano(organo_donado.tipo_organos)
+                if not cirujano_receptor:
+                    print("❌ No hay cirujano disponible para trasplante en el centro receptor.")
+                    return False
+
+                tiempo_transcurrido = tiempo_llegada - tiempo_actual
+                if tiempo_transcurrido > timedelta(hours=20):
+                    print("⛔ El órgano no llegó a tiempo. Tiempo excedido para trasplante.")
+                    return False
+
+        # Trasplante exitoso
+                print(f"✅ Trasplante realizado con éxito por cirujano: {cirujano_receptor.nombre} en paciente:{receptor.nombre}")
+                receptores.remove(receptor)
+                return True
+
+    # Proceso de match y ejecución
+            for receptor in receptores[:]:  # Copia para evitar modificación durante la iteración
                 for donante in donantes:
                     if receptor.match(donante):
                         organo_donado = donante.organo_donado(receptor.organo_necesitado)
                         if organo_donado:
-                            print(f"Órgano {organo_donado.tipo_organos} asignado a {receptor.nombre}")
-                        else:
-                            print(f"No se pudo donar el órgano a {receptor.nombre}")
-                            cirujano = donante.centro_salud.asignar_cirujano(organo_donado.tipo_organos)
-                            if cirujano:
-                                print(f" Cirujano asignado: {cirujano.nombre}")
-                            else:
-                                print("No hay cirujano disponible o especializado en ese órgano.")
-                    else:
-                        print(f"No se pudo donar el órgano a {receptor.nombre}")    
-   
-            print("🔄 Sistema ejecutado con éxito.\n")
+                            exito = protocolo_trasplante(donante, receptor, organo_donado)
+                            break  # Receptor ya fue atendido
         elif opcion == "7":
             ver_vehiculos()
         elif opcion == "8":
